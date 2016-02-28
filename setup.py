@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 #  encoding: utf-8
-from __future__ import unicode_literals, absolute_import
 
 from distutils.core import setup
 
@@ -10,7 +9,6 @@ setup(name='django-populate-from-field',
       author='Jean-Hugues Pinson',
       author_email='jh.pinson@gmail.com',
       url='',
-      license='Private',
       packages=['populate_from_field'],
       install_requires=[
           'django'
