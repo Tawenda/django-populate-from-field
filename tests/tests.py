@@ -5,7 +5,7 @@ from django.test import TestCase
 
 from populate_from_field.exceptions import UnkownPopulateFromSource
 from .models import (UnknownCharFieldTestModel, CharFieldTestModel, FnCharFieldTestModel, NonEditableCharFieldTestModel,
-                     AutoPopulateFormCharFieldTestModel, notImplementedAutoPopulateFormCharFieldTestModel)
+                     AutoPopulateFormCharFieldTestModel, notImplementedAutoPopulateFormCharFieldTestModel, TestBooleanFieldModel)
 
 
 class PopulateFromFieldTest(TestCase):
@@ -53,3 +53,10 @@ class PopulateFromFieldTest(TestCase):
         source_text = 'test_not_implemented_auto_populate'
         instance = notImplementedAutoPopulateFormCharFieldTestModel(source_text=source_text)
         self.assertRaises(UnkownPopulateFromSource, instance.save)
+
+    def test_boolean(self):
+        instance = TestBooleanFieldModel()
+        instance.save()
+
+        self.assertFalse(instance.field)
+

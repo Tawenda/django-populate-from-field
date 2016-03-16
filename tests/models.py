@@ -3,7 +3,7 @@ from __future__ import unicode_literals, absolute_import
 
 from django.db import models
 
-from populate_from_field.fields import PopulateFromCharField
+from .fields import PopulateFromCharField, PopulateFromBooleanField
 
 
 class UnknownCharFieldTestModel(models.Model):
@@ -41,3 +41,11 @@ class AutoPopulateFormCharFieldTestModel(models.Model):
 class notImplementedAutoPopulateFormCharFieldTestModel(models.Model):
     source_text = models.CharField(max_length=256)
     target_text = PopulateFromCharField(max_length=256)
+
+
+class TestBooleanFieldModel(models.Model):
+
+    def populate_from(self):
+        return False
+
+    field = PopulateFromBooleanField(populate_from=populate_from, default=None)

@@ -1,7 +1,6 @@
 # encoding: utf-8
 from __future__ import unicode_literals, absolute_import
 
-from django.db.models.fields import CharField
 from django.utils.translation import ugettext_lazy as _
 
 from populate_from_field.exceptions import UnkownPopulateFromSource
@@ -48,5 +47,3 @@ class BasePopulateFromField(object):
             return super(BasePopulateFromField, self).pre_save(model_instance, add)
 
 
-class PopulateFromCharField(BasePopulateFromField, CharField):
-    pass

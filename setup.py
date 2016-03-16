@@ -4,7 +4,7 @@
 from distutils.core import setup
 
 setup(name='django-populate-from-field',
-      version='1.0',
+      version='1.1',
       description='Field that auto populate from another field or any callable',
       author='Jean-Hugues Pinson',
       author_email='jh.pinson@gmail.com',
