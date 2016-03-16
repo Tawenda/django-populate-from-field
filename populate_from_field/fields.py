@@ -1,7 +1,6 @@
 # encoding: utf-8
 from __future__ import unicode_literals, absolute_import
 
-from django.db.models.fields import CharField
 from django.utils.translation import ugettext_lazy as _
 
 from populate_from_field.exceptions import UnkownPopulateFromSource
@@ -18,8 +17,7 @@ class BasePopulateFromField(object):
         elif callable(populate_from):
             self.populate_from = populate_from
         else:
-            raise Exception('populate_from must be callable or basestring instance')
-
+            self.populate_from = None
         super(BasePopulateFromField, self).__init__(*args, **kwargs)
 
     @staticmethod
@@ -27,7 +25,7 @@ class BasePopulateFromField(object):
         if hasattr(instance, populate_from):
             return getattr(instance, populate_from)
         else:
-            raise UnkownPopulateFromSource('Instance hasn\'t field %s' % populate_from)
+            raise UnkownPopulateFromSource('Instance hasn\'t attr %s' % populate_from)
 
     def deconstruct(self):
         name, path, args, kwargs = super(BasePopulateFromField, self).deconstruct()
@@ -36,12 +34,16 @@ class BasePopulateFromField(object):
 
     def pre_save(self, model_instance, add):
         if not getattr(model_instance, self.attname, None) or not self.editable:
-            value = self.populate_from(model_instance)
+
+            if self.populate_from is not None:
+                value = self.populate_from(model_instance)
+
+            else:
+                value = self._value_from_field(model_instance, 'populate_%s' % self.attname)()
+
             setattr(model_instance, self.attname, value)
             return value
         else:
             return super(BasePopulateFromField, self).pre_save(model_instance, add)
 
 
-class PopulateFromCharField(BasePopulateFromField, CharField):
-    pass

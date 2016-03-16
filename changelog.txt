@@ -1,0 +1,7 @@
+1.1
+    - try to call instance.populate_<field_name> if nothing else was defined
+    - move test fields to tests app
+    - add documentation
+1.0
+    - populate from another field
+    - populate from method
