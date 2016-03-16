@@ -4,7 +4,8 @@ from __future__ import unicode_literals, absolute_import
 from django.test import TestCase
 
 from populate_from_field.exceptions import UnkownPopulateFromSource
-from .models import UnknownCharFieldTestModel, CharFieldTestModel, FnCharFieldTestModel, NonEditableCharFieldTestModel
+from .models import (UnknownCharFieldTestModel, CharFieldTestModel, FnCharFieldTestModel, NonEditableCharFieldTestModel,
+                     AutoPopulateFormCharFieldTestModel, notImplementedAutoPopulateFormCharFieldTestModel)
 
 
 class PopulateFromFieldTest(TestCase):
@@ -40,3 +41,15 @@ class PopulateFromFieldTest(TestCase):
         instance.save()
         self.assertEqual(source_text, instance.source_text)
         self.assertEqual(source_text, instance.target_text)
+
+    def test_auto_populate(self):
+        source_text = 'test_auto_populate'
+        instance = AutoPopulateFormCharFieldTestModel(source_text=source_text)
+        instance.save()
+        self.assertEqual(source_text, instance.source_text)
+        self.assertEqual(instance.populate_target_text(), instance.target_text)
+
+    def test_not_implemented_auto_populate(self):
+        source_text = 'test_not_implemented_auto_populate'
+        instance = notImplementedAutoPopulateFormCharFieldTestModel(source_text=source_text)
+        self.assertRaises(UnkownPopulateFromSource, instance.save)
