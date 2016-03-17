@@ -36,7 +36,10 @@ class BasePopulateFromField(models.Field):
         return name, path, args, kwargs
 
     def pre_save(self, model_instance, add):
-        if not getattr(model_instance, self.attname, None) or not self.editable:
+
+        current_field_value = self._get_val_from_obj(model_instance)
+
+        if current_field_value == self.get_default() or not self.editable:
 
             if self.populate_from is not None:
                 value = self.populate_from(model_instance)

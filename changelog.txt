@@ -1,3 +1,6 @@
+1.3
+    - populate if editable is False or current value is equal to default value
+
 1.2
     - fallback on default value if populate_from is missing
 
