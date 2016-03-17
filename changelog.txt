@@ -1,4 +1,4 @@
-head
+1.2
     - fallback on default value if populate_from is missing
 
 1.1

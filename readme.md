@@ -2,9 +2,9 @@ A field mixin that allow your to define custom fields that populate from several
 
 ## Installation
 
-Last release is 1.1
+Last release is 1.2
 
-    pip install <git url>
+    pip install git+https://github.com/Tawenda/django-populate-from-field.git@1.2#egg=django-populate-from-field
 
 ## Usage
 
