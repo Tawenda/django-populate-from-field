@@ -2,15 +2,17 @@
 from __future__ import unicode_literals, absolute_import
 
 from django.utils.translation import ugettext_lazy as _
-
+from django.db import models
 from populate_from_field.exceptions import UnkownPopulateFromSource
 
 
-class BasePopulateFromField(object):
+class BasePopulateFromField(models.Field):
 
     description = _("Field that populate from callable or instance attribut")
 
-    def __init__(self, populate_from=None, *args, **kwargs):
+    def __init__(self, populate_from=None, fallback_on_default = True, *args, **kwargs):
+
+        self.fallback_on_default = fallback_on_default
 
         if isinstance(populate_from, basestring):
             self.populate_from = lambda instance: self._value_from_field(instance, populate_from)
@@ -20,10 +22,11 @@ class BasePopulateFromField(object):
             self.populate_from = None
         super(BasePopulateFromField, self).__init__(*args, **kwargs)
 
-    @staticmethod
-    def _value_from_field(instance, populate_from):
+    def _value_from_field(self,instance, populate_from):
         if hasattr(instance, populate_from):
             return getattr(instance, populate_from)
+        elif self.fallback_on_default:
+            return self.get_default()
         else:
             raise UnkownPopulateFromSource('Instance hasn\'t attr %s' % populate_from)
 
@@ -37,9 +40,10 @@ class BasePopulateFromField(object):
 
             if self.populate_from is not None:
                 value = self.populate_from(model_instance)
-
             else:
-                value = self._value_from_field(model_instance, 'populate_%s' % self.attname)()
+                value = self._value_from_field(model_instance, 'populate_%s' % self.attname)
+                if callable(value):
+                    value = value()
 
             setattr(model_instance, self.attname, value)
             return value
